@@ -14,7 +14,333 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      client_wishlist: {
+        Row: {
+          created_at: string | null
+          id: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_wishlist_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_wishlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          category: Database["public"]["Enums"]["product_category"]
+          created_at: string | null
+          description: string | null
+          id: string
+          images: string[]
+          is_active: boolean | null
+          is_featured: boolean | null
+          name: string
+          price: number
+          specifications: Json | null
+          updated_at: string | null
+          vendor: string
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["product_category"]
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          images: string[]
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          name: string
+          price: number
+          specifications?: Json | null
+          updated_at?: string | null
+          vendor: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["product_category"]
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          images?: string[]
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          name?: string
+          price?: number
+          specifications?: Json | null
+          updated_at?: string | null
+          vendor?: string
+        }
+        Relationships: []
+      }
+      professionals: {
+        Row: {
+          bio: string | null
+          category: Database["public"]["Enums"]["professional_category"]
+          created_at: string | null
+          experience_years: number | null
+          hourly_rate: number | null
+          id: string
+          is_active: boolean | null
+          is_verified: boolean | null
+          location: string
+          portfolio_images: string[] | null
+          rating: number | null
+          specializations: string[] | null
+          total_reviews: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          bio?: string | null
+          category: Database["public"]["Enums"]["professional_category"]
+          created_at?: string | null
+          experience_years?: number | null
+          hourly_rate?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          location: string
+          portfolio_images?: string[] | null
+          rating?: number | null
+          specializations?: string[] | null
+          total_reviews?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          bio?: string | null
+          category?: Database["public"]["Enums"]["professional_category"]
+          created_at?: string | null
+          experience_years?: number | null
+          hourly_rate?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          location?: string
+          portfolio_images?: string[] | null
+          rating?: number | null
+          specializations?: string[] | null
+          total_reviews?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "professionals_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          id: string
+          location: string | null
+          name: string
+          phone: string | null
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          id: string
+          location?: string | null
+          name: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          id?: string
+          location?: string | null
+          name?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          budget_max: number | null
+          budget_min: number | null
+          client_id: string
+          created_at: string | null
+          description: string | null
+          end_date: string | null
+          id: string
+          notes: string | null
+          professional_id: string
+          start_date: string | null
+          status: Database["public"]["Enums"]["project_status"] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          budget_max?: number | null
+          budget_min?: number | null
+          client_id: string
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          professional_id: string
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["project_status"] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          budget_max?: number | null
+          budget_min?: number | null
+          client_id?: string
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          professional_id?: string
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["project_status"] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          client_id: string
+          comment: string | null
+          created_at: string | null
+          id: string
+          professional_id: string
+          project_id: string | null
+          rating: number
+        }
+        Insert: {
+          client_id: string
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          professional_id: string
+          project_id?: string | null
+          rating: number
+        }
+        Update: {
+          client_id?: string
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          professional_id?: string
+          project_id?: string | null
+          rating?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saved_professionals: {
+        Row: {
+          created_at: string | null
+          id: string
+          professional_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          professional_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          professional_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_professionals_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "saved_professionals_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +349,25 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      product_category:
+        | "furniture"
+        | "tiles"
+        | "lighting"
+        | "decor"
+        | "modular_kitchen"
+        | "paints"
+      professional_category:
+        | "interior_designer"
+        | "architect"
+        | "contractor"
+        | "decorator"
+      project_status:
+        | "requested"
+        | "accepted"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+      user_role: "client" | "professional" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +494,29 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      product_category: [
+        "furniture",
+        "tiles",
+        "lighting",
+        "decor",
+        "modular_kitchen",
+        "paints",
+      ],
+      professional_category: [
+        "interior_designer",
+        "architect",
+        "contractor",
+        "decorator",
+      ],
+      project_status: [
+        "requested",
+        "accepted",
+        "in_progress",
+        "completed",
+        "cancelled",
+      ],
+      user_role: ["client", "professional", "admin"],
+    },
   },
 } as const
