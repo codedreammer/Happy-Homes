@@ -329,7 +329,10 @@ export default function Products() {
                     {product.description}
                   </p>
                   
-                  <Button className="w-full bg-gradient-primary hover:shadow-elegant">
+                  <Button 
+                    className="w-full bg-gradient-primary hover:shadow-elegant"
+                    onClick={() => window.location.href = `/product/${product.id}`}
+                  >
                     <Package className="h-4 w-4 mr-2" />
                     View Details
                   </Button>
