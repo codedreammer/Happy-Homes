@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Mail, Lock, User, Chrome } from "lucide-react";
+import { Mail, Lock, User, Chrome, Users, Briefcase, Shield } from "lucide-react";
 
 export default function Auth() {
   const { user, loading, signIn, signUp, signInWithGoogle } = useAuth();
@@ -15,6 +16,7 @@ export default function Auth() {
     email: "",
     password: "",
     name: "",
+    role: "client",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -29,7 +31,7 @@ export default function Auth() {
 
     try {
       if (isSignUp) {
-        await signUp(formData.email, formData.password, formData.name);
+        await signUp(formData.email, formData.password, formData.name, formData.role);
       } else {
         await signIn(formData.email, formData.password);
       }
@@ -54,6 +56,12 @@ export default function Auth() {
       </div>
     );
   }
+
+  const roleOptions = [
+    { value: "client", label: "Client", icon: Users, description: "Looking for design services" },
+    { value: "professional", label: "Professional", icon: Briefcase, description: "Designer, architect, or contractor" },
+    { value: "admin", label: "Admin", icon: Shield, description: "Platform administrator" },
+  ];
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-warm p-4">
@@ -108,6 +116,30 @@ export default function Auth() {
                     required={isSignUp}
                   />
                 </div>
+              </div>
+            )}
+
+            {isSignUp && (
+              <div className="space-y-2">
+                <Label htmlFor="role">Account Type</Label>
+                <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {roleOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        <div className="flex items-center space-x-2">
+                          <option.icon className="h-4 w-4" />
+                          <div>
+                            <div className="font-medium">{option.label}</div>
+                            <div className="text-xs text-muted-foreground">{option.description}</div>
+                          </div>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             )}
 

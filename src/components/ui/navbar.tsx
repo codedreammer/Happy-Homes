@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Home, Users, Package, Info, Phone, LogIn } from "lucide-react";
+import { UserNav } from "@/components/ui/user-nav";
+import { Menu, X, Home, Users, Package, Info, Phone } from "lucide-react";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,17 +50,9 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Auth Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/auth">
-                <LogIn className="h-4 w-4 mr-2" />
-                Login
-              </Link>
-            </Button>
-            <Button size="sm" className="bg-gradient-primary hover:shadow-elegant" asChild>
-              <Link to="/auth">Sign Up</Link>
-            </Button>
+          {/* User Navigation */}
+          <div className="hidden md:flex items-center">
+            <UserNav />
           </div>
 
           {/* Mobile menu button */}
@@ -94,18 +87,8 @@ export function Navbar() {
                 <span>{item.name}</span>
               </Link>
             ))}
-            <div className="flex flex-col space-y-2 pt-4 border-t border-border">
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Login
-                </Link>
-              </Button>
-              <Button size="sm" className="bg-gradient-primary" asChild>
-                <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                  Sign Up
-                </Link>
-              </Button>
+            <div className="pt-4 border-t border-border">
+              <UserNav />
             </div>
           </div>
         </div>

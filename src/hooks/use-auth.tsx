@@ -3,14 +3,29 @@ import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+interface Profile {
+  id: string;
+  name: string;
+  role: 'client' | 'professional' | 'admin';
+  email?: string;
+  avatar_url?: string;
+  phone?: string;
+  location?: string;
+}
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
+  profile: Profile | null;
   loading: boolean;
-  signUp: (email: string, password: string, name?: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, name?: string, role?: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<{ error: any }>;
   signInWithGoogle: () => Promise<{ error: any }>;
+  isRole: (role: string) => boolean;
+  isClient: boolean;
+  isProfessional: boolean;
+  isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,15 +33,24 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          // Fetch user profile
+          await fetchUserProfile(session.user.id);
+        } else {
+          setProfile(null);
+        }
+        
         setLoading(false);
 
         if (event === 'SIGNED_IN') {
@@ -45,16 +69,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
 
     // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        await fetchUserProfile(session.user.id);
+      }
+      
       setLoading(false);
     });
 
     return () => subscription.unsubscribe();
   }, [toast]);
 
-  const signUp = async (email: string, password: string, name?: string) => {
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        if (error.code !== 'PGRST116') { // Not found error
+          console.error('Error fetching profile:', error);
+        }
+        return;
+      }
+
+      setProfile(data);
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    }
+  };
+
+  const signUp = async (email: string, password: string, name?: string, role: string = 'client') => {
     const redirectUrl = `${window.location.origin}/`;
     
     const { error } = await supabase.auth.signUp({
@@ -62,7 +112,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       password,
       options: {
         emailRedirectTo: redirectUrl,
-        data: name ? { name } : undefined,
+        data: { 
+          name,
+          role
+        },
       }
     });
 
@@ -132,16 +185,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error };
   };
 
+  const isRole = (role: string) => profile?.role === role;
+  const isClient = profile?.role === 'client';
+  const isProfessional = profile?.role === 'professional';
+  const isAdmin = profile?.role === 'admin';
+
   return (
     <AuthContext.Provider
       value={{
         user,
         session,
+        profile,
         loading,
         signUp,
         signIn,
         signOut,
         signInWithGoogle,
+        isRole,
+        isClient,
+        isProfessional,
+        isAdmin,
       }}
     >
       {children}

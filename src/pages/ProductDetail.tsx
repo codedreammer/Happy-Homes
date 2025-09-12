@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Heart, Package, Star, Lock, Eye, ShoppingCart } from "lucide-react";
 import { Navbar } from "@/components/ui/navbar";
 import { useToast } from "@/hooks/use-toast";
+import { Simple3DViewer } from "@/components/3d/Simple3DViewer";
 
 interface Product {
   id: string;
@@ -318,31 +319,23 @@ export default function ProductDetail() {
 
         {/* 3D Viewer & AR Section */}
         <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* 3D Product Viewer */}
-          <Card className="hover-lift shadow-soft">
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Eye className="h-5 w-5 mr-2" />
-                3D Product Viewer
-              </CardTitle>
-              <CardDescription>
-                Explore this product in 3D to see every detail
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="aspect-square bg-gradient-to-br from-muted to-muted/50 rounded-lg flex items-center justify-center text-center p-8">
-                <div>
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Package className="h-8 w-8 text-primary" />
-                  </div>
-                  <h4 className="font-semibold mb-2">3D Model Coming Soon</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Interactive 3D preview will be available soon for this product
-                  </p>
+            {/* 3D Product Viewer */}
+            <Card className="hover-lift shadow-soft">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Eye className="h-5 w-5 mr-2" />
+                  3D Product Viewer
+                </CardTitle>
+                <CardDescription>
+                  Explore this product in 3D to see every detail
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="aspect-square rounded-lg overflow-hidden relative">
+                  <Simple3DViewer productName={product.name} />
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
           {/* AR Viewer - Premium Feature */}
           <Card className="hover-lift shadow-soft relative overflow-hidden">
