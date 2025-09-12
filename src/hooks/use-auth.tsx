@@ -167,22 +167,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/`,
-      },
-    });
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+      });
 
-    if (error) {
+      if (error) {
+        toast({
+          title: "Google sign in failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
+
+      return { error };
+    } catch (error: any) {
       toast({
         title: "Google sign in failed",
-        description: error.message,
+        description: error.message || "An unexpected error occurred",
         variant: "destructive",
       });
+      return { error };
     }
-
-    return { error };
   };
 
   const isRole = (role: string) => profile?.role === role;
