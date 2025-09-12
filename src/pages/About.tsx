@@ -133,7 +133,7 @@ export default function About() {
             <div className="relative">
               <div className="aspect-square rounded-2xl overflow-hidden shadow-elegant">
                 <img 
-                  src="/placeholder.svg" 
+                  src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGdyb3VwJTIwb2YlMjBwZW9wbGV8ZW58MHx8MHx8fDA%3D" 
                   alt="Our story" 
                   className="w-full h-full object-cover"
                 />

@@ -57,7 +57,7 @@ export default function Professionals() {
         .order("rating", { ascending: false });
 
       if (error) throw error;
-      setProfessionals(data || []);
+      setProfessionals(data ?? []);
     } catch (error) {
       console.error("Error fetching professionals:", error);
     } finally {
