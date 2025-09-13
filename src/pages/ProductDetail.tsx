@@ -1,19 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Heart, Package, Star, Lock, Eye, ShoppingCart } from "lucide-react";
-import { Navbar } from "@/components/ui/navbar";
-import { useToast } from "@/hooks/use-toast";
-import { Simple3DViewer } from "@/components/3d/Simple3DViewer";
 
 interface Product {
   id: string;
   name: string;
+  model_url?: string;
   category: string;
   description: string;
   price: number;
@@ -22,6 +14,14 @@ interface Product {
   specifications: any;
   is_featured: boolean;
 }
+import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { ArrowLeft, Heart, Package, Star, Lock, Eye, ShoppingCart } from "lucide-react";
+import { Navbar } from "@/components/ui/navbar";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -45,12 +45,15 @@ export default function ProductDetail() {
     try {
       const { data, error } = await supabase
         .from("products")
-        .select("*")
-        .eq("id", id)
+        .select("id, name, category, description, price, vendor, images, specifications, is_featured, model_url")
+        .eq("id", String(id))
         .single();
 
       if (error) throw error;
-      setProduct(data);
+
+      if (data) {
+        setProduct(data as Product);    
+      }
     } catch (error) {
       console.error("Error fetching product:", error);
       toast({
@@ -98,6 +101,7 @@ export default function ProductDetail() {
           .delete()
           .eq("user_id", user.id)
           .eq("product_id", id);
+        
 
         if (error) throw error;
         setIsInWishlist(false);
@@ -317,62 +321,71 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        {/* 3D Viewer & AR Section */}
-        <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* 3D Product Viewer */}
+        {/* 3D Viewer Section */}
+        {product.model_url && (
+          <div className="mt-16 space-y-8">
             <Card className="hover-lift shadow-soft">
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Eye className="h-5 w-5 mr-2" />
-                  3D Product Viewer
+                  3D Viewer
                 </CardTitle>
                 <CardDescription>
-                  Explore this product in 3D to see every detail
+                  Explore this product in interactive 3D
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="aspect-square rounded-lg overflow-hidden relative">
-                  <Simple3DViewer productName={product.name} />
-                </div>
+                <model-viewer
+                  src={product.model_url}
+                  camera-controls
+                  auto-rotate
+                  style={{ width: '100%', height: '400px' }}
+                  alt={product.name}
+                ></model-viewer>
               </CardContent>
             </Card>
 
-          {/* AR Viewer - Premium Feature */}
-          <Card className="hover-lift shadow-soft relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 z-0"></div>
-            <CardHeader className="relative z-10">
-              <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center">
+            {/* AR Section - Pro Only */}
+            <Card className="hover-lift shadow-soft">
+              <CardHeader>
+                <CardTitle className="flex items-center">
                   <Eye className="h-5 w-5 mr-2" />
-                  AR Preview
-                </div>
-                <Badge className="bg-gradient-primary text-primary-foreground">
-                  <Lock className="h-3 w-3 mr-1" />
-                  Premium
-                </Badge>
-              </CardTitle>
-              <CardDescription>
-                See how this product looks in your space with AR technology
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="relative z-10">
-              <div className="aspect-square bg-gradient-to-br from-muted/50 to-muted/20 rounded-lg flex items-center justify-center text-center p-8 border border-dashed border-primary/20">
-                <div>
-                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 opacity-50">
-                    <Lock className="h-8 w-8 text-primary-foreground" />
+                  AR Viewer
+                  <Badge className="ml-2 bg-gradient-primary text-primary-foreground">Pro</Badge>
+                </CardTitle>
+                <CardDescription>
+                  View this product in your space with augmented reality
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {user && profile?.role === 'professional' ? (
+                  <model-viewer
+                    src={product.model_url}
+                    ar
+                    ar-modes="scene-viewer quick-look webxr"
+                    camera-controls
+                    auto-rotate
+                    style={{ width: '100%', height: '400px' }}
+                    alt={product.name}
+                  ></model-viewer>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-16 text-center">
+                    <Lock className="h-12 w-12 text-muted-foreground mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">This feature is only available for Pro members</h3>
+                    <p className="text-muted-foreground mb-6 max-w-md">
+                      Upgrade to Pro to access AR viewing and see how products look in your space
+                    </p>
+                    <Link to="/subscribe">
+                      <Button className="bg-gradient-primary hover:shadow-elegant hover-lift">
+                        Upgrade to Pro
+                      </Button>
+                    </Link>
                   </div>
-                  <h4 className="font-semibold mb-2">Upgrade to Access AR Preview</h4>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Visualize this product in your own space using augmented reality
-                  </p>
-                  <Button variant="outline" className="hover-lift">
-                    Upgrade Now
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );

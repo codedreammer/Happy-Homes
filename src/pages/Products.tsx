@@ -1,5 +1,18 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+
+interface Product {
+  id: string;
+  name: string;
+  model_url?: string;
+  category: string;
+  description: string;
+  price: number;
+  vendor: string;
+  images: string[];
+  specifications: any;
+  is_featured: boolean;
+}
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,18 +22,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Heart, Search, Package, Star, Filter } from "lucide-react";
 import { Navbar } from "@/components/ui/navbar";
 import { useToast } from "@/hooks/use-toast";
-
-interface Product {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  price: number;
-  vendor: string;
-  images: string[];
-  specifications: any;
-  is_featured: boolean;
-}
+import { Link } from "react-router-dom";
 
 export default function Products() {
   const { user } = useAuth();
@@ -54,7 +56,7 @@ export default function Products() {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setProducts(data || []);
+      setProducts(data as Product[] || []);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -330,11 +332,13 @@ export default function Products() {
                   </p>
                   
                   <Button 
-                    className="w-full bg-gradient-primary hover:shadow-elegant"
-                    onClick={() => window.location.href = `/product/${product.id}`}
+                    className="flex-1 bg-gradient-primary hover:shadow-elegant"
+                    asChild
                   >
-                    <Package className="h-4 w-4 mr-2" />
-                    View Details
+                    <Link to={`/product/${product.id}`}>
+                      <Package className="h-4 w-4 mr-2" />
+                      View Details
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
