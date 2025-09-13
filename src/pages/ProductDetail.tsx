@@ -45,7 +45,7 @@ export default function ProductDetail() {
     try {
       const { data, error } = await supabase
         .from("products")
-        .select("id, name, category, description, price, vendor, images, specifications, is_featured, model_url")
+        .select("id, name, category, description, price, vendor, images, specifications, is_featured")
         .eq("id", String(id))
         .single();
 
@@ -100,7 +100,7 @@ export default function ProductDetail() {
           .from("client_wishlist")
           .delete()
           .eq("user_id", user.id)
-          .eq("product_id", id);
+          .eq("product_id", String(id));
         
 
         if (error) throw error;
@@ -114,7 +114,7 @@ export default function ProductDetail() {
           .from("client_wishlist")
           .insert({
             user_id: user.id,
-            product_id: id,
+            product_id: String(id),
           });
 
         if (error) throw error;
@@ -358,7 +358,7 @@ export default function ProductDetail() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {user && profile?.role === 'professional' ? (
+                {user ? (
                   <model-viewer
                     src={product.model_url}
                     ar
