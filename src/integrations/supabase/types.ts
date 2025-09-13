@@ -48,6 +48,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "client_wishlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_professionals"
+            referencedColumns: ["id"]
+          },
         ]
       }
       products: {
@@ -158,6 +165,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "professionals_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_professionals"
+            referencedColumns: ["id"]
+          },
         ]
       }
       profiles: {
@@ -248,11 +262,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "projects_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "public_professionals"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "projects_professional_id_fkey"
             columns: ["professional_id"]
             isOneToOne: false
             referencedRelation: "professionals"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "public_professionals"
+            referencedColumns: ["professional_id"]
           },
         ]
       }
@@ -293,11 +321,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "reviews_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "public_professionals"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "reviews_professional_id_fkey"
             columns: ["professional_id"]
             isOneToOne: false
             referencedRelation: "professionals"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "public_professionals"
+            referencedColumns: ["professional_id"]
           },
           {
             foreignKeyName: "reviews_project_id_fkey"
@@ -336,17 +378,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "saved_professionals_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "public_professionals"
+            referencedColumns: ["professional_id"]
+          },
+          {
             foreignKeyName: "saved_professionals_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "saved_professionals_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_professionals"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      public_professionals: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          category: Database["public"]["Enums"]["professional_category"] | null
+          experience_years: number | null
+          hourly_rate: number | null
+          id: string | null
+          is_active: boolean | null
+          is_verified: boolean | null
+          location: string | null
+          name: string | null
+          portfolio_images: string[] | null
+          professional_id: string | null
+          rating: number | null
+          role: Database["public"]["Enums"]["user_role"] | null
+          specializations: string[] | null
+          total_reviews: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_current_user_role: {
