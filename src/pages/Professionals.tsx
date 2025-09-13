@@ -1,300 +1,216 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Navbar } from "@/components/ui/navbar";
+import { 
+  Star, 
+  MapPin, 
+  Clock, 
+  Filter,
+  Search
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Star, Clock, Users, Search, Filter } from "lucide-react";
-import { Navbar } from "@/components/ui/navbar";
+import { Link } from "react-router-dom";
 
-interface Professional {
-  id: string;
-  user_id: string;
-  category: string;
-  bio: string;
-  location: string;
-  rating: number;
-  total_reviews: number;
-  hourly_rate: number;
-  experience_years: number;
-  specializations: string[];
-  is_verified: boolean;
-  profiles: {
-    name: string;
-    avatar_url?: string;
-  };
-}
+const professionals = [
+  {
+    id: 1,
+    name: "Canna Hasmukh Patel",
+    profession: "Interior Designer",
+    location: "Mumbai, Maharashtra",
+    rating: 4.9,
+    experience: "8 years experience",
+    image: "https://imgs.search.brave.com/TDVh93qIHs-TWgvd3Ow6CyD7HPxFJ721wIZqaFwzdKs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/YXJjaGl0ZWN0YW5k/aW50ZXJpb3JzaW5k/aWEuY29tL2Nsb3Vk/LzIwMjEvMTEvMTUv/Q2FubmEuanBn",
+  },
+  {
+    id: 2,
+    name: "Shimul Javeri Kadri",
+    profession: "Architect",
+    location: "Bangalore, Karnataka",
+    rating: 4.8,
+    experience: "6 years experience",
+    image: "https://imgs.search.brave.com/leLfHHpLwEGqAdd-07LFthSvm8gD5l5C4LjZJ9SwvZY/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuYXJjaGl0ZWN0/dXJlcGx1c2Rlc2ln/bi5pbi93cC1jb250/ZW50L3VwbG9hZHMv/MjAyNC8wMy8xMzEy/MjgxMy9TaGltdWwt/SmF2ZXJpLUthZHJp/LUZvdW5kaW5nLVBh/cnRuZXItU0pLLUFy/Y2hpdGVjdHMtaW5z/aWRlLWltYWdlLTU3/Ni14LTcyMC12ZXJ0/aWNhbC5qcGc",
+  },
+  {
+    id: 3,
+    name: "Seetu Kohli",
+    profession: "Interior Designer",
+    location: "Delhi, NCR",
+    rating: 4.7,
+    experience: "10 years experience",
+    image: "https://imgs.search.brave.com/dUs0L6COD5aBJtNzy1xWJMIATV-9P15yflFb2I0VgH0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS52b2d1ZS5pbi93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyMC8x/Mi9TZWV0dS1rb2hs/aS5naWY.jpeg",
+  },
+  {
+    id: 4,
+    name: "Nikhil Patel",
+    profession: "Civil Engineer",
+    location: "Chennai, Tamil Nadu",
+    rating: 4.9,
+    experience: "7 years experience",
+    image: "https://imgs.search.brave.com/Vma6kSW715FcvyG0smF_-xAyBq8IAMPAYCep-xhiRV8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wYXRl/bGVuZy5jb20vaW1h/Z2VzLzQ5NzJFbWFu/ZGlfU2Fua2FyYV9S/YW9fQk9ELnBuZw",
+  },
+  {
+    id: 5,
+    name: "Housejoy",
+    profession: "Contractor",
+    location: "Pune, Maharashtra",
+    rating: 4.8,
+    experience: "9 years experience",
+    image: "https://imgs.search.brave.com/Etb8QmMTSFKKsGAc4lpn7k8JswK6nP85FExd_2kNspo/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMua3JlYXRlY3Vi/ZS5jb20vdXNlZnVs/bC92ZW5kb3IvbG9n/by8zNTkwNy5wbmc",
+  },
+  {
+    id: 6,
+    name: "Vikram Joshi",
+    profession: "Skilled Worker",
+    location: "Jaipur, Rajasthan",
+    rating: 4.6,
+    experience: "12 years experience",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+  },
+];
 
 export default function Professionals() {
-  const [professionals, setProfessionals] = useState<Professional[]>([]);
-  const [filteredProfessionals, setFilteredProfessionals] = useState<Professional[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [selectedProfession, setSelectedProfession] = useState("all");
+  const [selectedLocation, setSelectedLocation] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState<string>("all");
-  const [locationFilter, setLocationFilter] = useState<string>("all");
 
-  useEffect(() => {
-    fetchProfessionals();
-  }, []);
-
-  useEffect(() => {
-    filterProfessionals();
-  }, [professionals, searchTerm, categoryFilter, locationFilter]);
-
-  const fetchProfessionals = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("professionals")
-        .select(`
-          *,
-          profiles (
-            name,
-            avatar_url
-          )
-        `)
-        .eq("is_active", true)
-        .order("rating", { ascending: false });
-
-      if (error) throw error;
-      setProfessionals(data ?? []);
-    } catch (error) {
-      console.error("Error fetching professionals:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filterProfessionals = () => {
-    let filtered = professionals;
-
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (prof) =>
-          prof.profiles.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          prof.bio?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          prof.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          prof.specializations.some(spec => 
-            spec.toLowerCase().includes(searchTerm.toLowerCase())
-          )
-      );
-    }
-
-    if (categoryFilter !== "all") {
-      filtered = filtered.filter((prof) => prof.category === categoryFilter);
-    }
-
-    if (locationFilter !== "all") {
-      filtered = filtered.filter((prof) => 
-        prof.location.toLowerCase().includes(locationFilter.toLowerCase())
-      );
-    }
-
-    setFilteredProfessionals(filtered);
-  };
-
-  const formatCategory = (category: string) => {
-    return category.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      minimumFractionDigits: 0,
-    }).format(amount);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-warm">
-        <Navbar />
-        <div className="max-w-7xl mx-auto px-4 py-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <Card key={i} className="animate-pulse">
-                <CardHeader>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-muted rounded-full"></div>
-                    <div>
-                      <div className="h-4 bg-muted rounded w-32 mb-2"></div>
-                      <div className="h-3 bg-muted rounded w-24"></div>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div className="h-3 bg-muted rounded"></div>
-                    <div className="h-3 bg-muted rounded w-3/4"></div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const filteredProfessionals = professionals.filter(professional => {
+    const matchesProfession = selectedProfession === "all" || 
+      professional.profession.toLowerCase().replace(/\s+/g, '-') === selectedProfession;
+    const matchesLocation = selectedLocation === "all" || 
+      professional.location.toLowerCase().includes(selectedLocation);
+    const matchesSearch = searchTerm === "" || 
+      professional.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      professional.profession.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return matchesProfession && matchesLocation && matchesSearch;
+  });
 
   return (
     <div className="min-h-screen bg-gradient-warm">
       <Navbar />
       
-      {/* Header Section */}
-      <section className="bg-gradient-hero text-primary-foreground py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl font-bold mb-4">Find Expert Professionals</h1>
-            <p className="text-lg opacity-90">
-              Connect with India's finest interior designers, architects, contractors, and decorators
-            </p>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold text-primary mb-4">Browse Professionals</h1>
+          <p className="text-xl font-semibold text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+            Connect with verified architects, designers, and specialists for your dream home project
+          </p>
+        </div>
+
+        {/* Filter Bar */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <Select value={selectedProfession} onValueChange={setSelectedProfession}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select Profession" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Professions</SelectItem>
+              <SelectItem value="architect">Architect</SelectItem>
+              <SelectItem value="interior-designer">Interior Designer</SelectItem>
+              <SelectItem value="civil-engineer">Civil Engineer</SelectItem>
+              <SelectItem value="contractor">Contractor</SelectItem>
+              <SelectItem value="skilled-worker">Skilled Worker</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select Location" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Locations</SelectItem>
+              <SelectItem value="mumbai">Mumbai</SelectItem>
+              <SelectItem value="delhi">Delhi</SelectItem>
+              <SelectItem value="bangalore">Bangalore</SelectItem>
+              <SelectItem value="chennai">Chennai</SelectItem>
+              <SelectItem value="pune">Pune</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Search professionals..."
+              className="pl-10"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </div>
-      </section>
 
-      {/* Filters Section */}
-      <section className="py-8 bg-background/80 backdrop-blur border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Search */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search professionals, specializations, locations..."
-                className="pl-10"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+        {/* Professionals Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProfessionals.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <p className="text-xl text-muted-foreground">No professionals found matching your criteria.</p>
             </div>
-
-            {/* Category Filter */}
-            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent className="bg-background border border-border shadow-lg">
-                <SelectItem value="all">All Categories</SelectItem>
-                <SelectItem value="interior_designer">Interior Designer</SelectItem>
-                <SelectItem value="architect">Architect</SelectItem>
-                <SelectItem value="contractor">Contractor</SelectItem>
-                <SelectItem value="decorator">Decorator</SelectItem>
-              </SelectContent>
-            </Select>
-
-            {/* Location Filter */}
-            <Select value={locationFilter} onValueChange={setLocationFilter}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Location" />
-              </SelectTrigger>
-              <SelectContent className="bg-background border border-border shadow-lg">
-                <SelectItem value="all">All Locations</SelectItem>
-                <SelectItem value="mumbai">Mumbai</SelectItem>
-                <SelectItem value="delhi">Delhi</SelectItem>
-                <SelectItem value="bangalore">Bangalore</SelectItem>
-                <SelectItem value="chennai">Chennai</SelectItem>
-                <SelectItem value="pune">Pune</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </section>
-
-      {/* Professionals Grid */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-2xl font-bold">
-              {filteredProfessionals.length} Professional{filteredProfessionals.length !== 1 ? 's' : ''} Found
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProfessionals.map((professional) => (
-              <Card key={professional.id} className="hover-lift shadow-soft hover:shadow-warm">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold">
-                        {professional.profiles.name.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          {professional.profiles.name}
-                          {professional.is_verified && (
-                            <Badge className="bg-primary text-primary-foreground">Verified</Badge>
-                          )}
-                        </CardTitle>
-                        <CardDescription className="flex items-center gap-1">
-                          <MapPin className="h-3 w-3" />
-                          {professional.location}
-                        </CardDescription>
-                      </div>
-                    </div>
+          ) : (
+            filteredProfessionals.map((professional) => (
+            <Card key={professional.id} className="bg-card rounded-2xl shadow-soft hover:shadow-lg p-4 transition transform hover:scale-105">
+              <CardContent className="p-0">
+                <div className="text-center mb-4">
+                  <img
+                    src={professional.image}
+                    alt={professional.name}
+                    className="w-20 h-20 rounded-full mx-auto mb-3 object-cover"
+                  />
+                  <h3 className="text-xl font-bold text-foreground mb-1">{professional.name}</h3>
+                  <p className="text-base font-semibold text-muted-foreground mb-1">{professional.profession}</p>
+                  <div className="flex items-center justify-center gap-1 text-sm text-gray-500 mb-3">
+                    <MapPin className="h-4 w-4" />
+                    {professional.location}
                   </div>
-
-                  <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-current text-yellow-500" />
-                      <span>{professional.rating || 0}/5</span>
-                      <span>({professional.total_reviews} reviews)</span>
-                    </div>
-                  </div>
-                </CardHeader>
-
-                <CardContent className="space-y-4">
-                  <div>
-                    <Badge variant="secondary" className="mb-2">
-                      {formatCategory(professional.category)}
-                    </Badge>
-                    <p className="text-sm text-muted-foreground line-clamp-2">
-                      {professional.bio}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-1">
-                    {professional.specializations.slice(0, 3).map((spec, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        {spec}
-                      </Badge>
+                  
+                  <div className="flex items-center justify-center gap-1 mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-4 w-4 ${
+                          i < Math.floor(professional.rating)
+                            ? "fill-yellow-400 text-yellow-400"
+                            : "text-gray-300"
+                        }`}
+                      />
                     ))}
-                    {professional.specializations.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{professional.specializations.length - 3} more
-                      </Badge>
-                    )}
+                    <span className="ml-1 text-sm font-medium">{professional.rating}</span>
                   </div>
-
-                  <div className="flex items-center justify-between pt-4 border-t">
-                    <div className="flex items-center gap-4 text-sm">
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4 text-muted-foreground" />
-                        <span>{professional.experience_years}+ years</span>
-                      </div>
-                      <div className="text-primary font-semibold">
-                        {formatCurrency(professional.hourly_rate)}/hr
-                      </div>
-                    </div>
-                    <Button size="sm" className="bg-gradient-primary hover:shadow-elegant">
-                      <Users className="h-4 w-4 mr-1" />
-                      Hire
+                  
+                  <p className="text-sm text-gray-600 mb-4">{professional.experience}</p>
+                  
+                  <Link to={`/professional/${professional.id}`}>
+                    <Button className="w-full bg-primary text-white rounded-xl hover:shadow-md transition-all">
+                      View Profile
                     </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {filteredProfessionals.length === 0 && (
-            <div className="text-center py-12">
-              <Filter className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No professionals found</h3>
-              <p className="text-muted-foreground">
-                Try adjusting your search criteria to find more professionals.
-              </p>
-            </div>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          ))
           )}
         </div>
-      </section>
+
+        {/* CTA Section */}
+        <div className="mt-16">
+          <Card className="bg-gradient-hero text-primary-foreground rounded-2xl">
+            <CardContent className="p-8 text-center">
+              <h3 className="text-3xl font-bold mb-4">Are You a Design Professional?</h3>
+              <p className="text-xl font-semibold text-primary-foreground/90 mb-6 max-w-2xl mx-auto">
+                Join DesifyHub and connect with homeowners looking for your expertise. 
+                Grow your business with our platform.
+              </p>
+              <Link to="/professional/register">
+                <Button variant="outline" size="lg" className="bg-card text-foreground hover:bg-accent border-card">
+                  Register as Professional
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }
