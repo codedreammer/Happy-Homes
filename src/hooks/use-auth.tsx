@@ -8,9 +8,9 @@ interface Profile {
   name: string;
   role: 'client' | 'professional' | 'admin';
   email?: string;
-  avatar_url?: string;
-  phone?: string;
-  location?: string;
+  avatar_url?: string | null;
+  phone?: string | null;
+  location?: string | null;
 }
 
 interface AuthContextType {
