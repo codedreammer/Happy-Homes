@@ -10,7 +10,8 @@ export const addTestProducts = async () => {
       vendor: 'Design Studio',
       images: ['https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500'],
       specifications: { material: 'Fabric', dimensions: '80x85x90cm', weight: '25kg' },
-      is_featured: true
+      is_featured: true,
+      model_url: '/chesterfield-sofa.glb'
     },
     {
       name: 'Wooden Coffee Table',
@@ -20,7 +21,8 @@ export const addTestProducts = async () => {
       vendor: 'Wood Works',
       images: ['https://images.unsplash.com/photo-1549497538-303791108f95?w=500'],
       specifications: { material: 'Oak Wood', dimensions: '120x60x45cm', weight: '30kg' },
-      is_featured: false
+      is_featured: false,
+      model_url: '/kitchen-marble.gltf'
     },
     {
       name: 'LED Pendant Light',
@@ -30,7 +32,8 @@ export const addTestProducts = async () => {
       vendor: 'Light House',
       images: ['https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?w=500'],
       specifications: { material: 'Metal & Glass', power: '15W LED', height: '30cm' },
-      is_featured: true
+      is_featured: true,
+      model_url: '/carpet.gltf'
     }
   ];
 

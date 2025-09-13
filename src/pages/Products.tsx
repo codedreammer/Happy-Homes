@@ -23,6 +23,8 @@ import { Heart, Search, Package, Star, Filter } from "lucide-react";
 import { Navbar } from "@/components/ui/navbar";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
+import { Product3DModal } from "@/components/ui/3d-modal";
+import { PlanModal } from "@/components/ui/plan-modal";
 
 export default function Products() {
   const { user } = useAuth();
@@ -331,8 +333,13 @@ export default function Products() {
                     {product.description}
                   </p>
                   
+                  <div className="flex gap-2 mb-3">
+                    <Product3DModal product={product} />
+                    <PlanModal product={product} />
+                  </div>
+                  
                   <Button 
-                    className="flex-1 bg-gradient-primary hover:shadow-elegant"
+                    className="w-full bg-gradient-primary hover:shadow-elegant"
                     asChild
                   >
                     <Link to={`/product/${product.id}`}>

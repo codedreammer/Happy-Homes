@@ -22,6 +22,8 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Heart, Package, Star, Lock, Eye, ShoppingCart } from "lucide-react";
 import { Navbar } from "@/components/ui/navbar";
 import { useToast } from "@/hooks/use-toast";
+import { Product3DModal } from "@/components/ui/3d-modal";
+import { PlanModal } from "@/components/ui/plan-modal";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -296,6 +298,27 @@ export default function ProductDetail() {
 
             {/* Action Buttons */}
             <div className="space-y-4">
+              <div className="flex gap-2 mb-4">
+                <Product3DModal 
+                  product={product} 
+                  trigger={
+                    <Button variant="outline" size="lg" className="flex-1">
+                      <Eye className="h-4 w-4 mr-2" />
+                      View in 3D
+                    </Button>
+                  }
+                />
+                <PlanModal 
+                  product={product}
+                  trigger={
+                    <Button variant="outline" size="lg" className="flex-1">
+                      <Package className="h-4 w-4 mr-2" />
+                      View Plans
+                    </Button>
+                  }
+                />
+              </div>
+              
               <div className="flex space-x-3">
                 <Button 
                   className="flex-1 bg-gradient-primary hover:shadow-elegant hover-lift"
@@ -371,13 +394,13 @@ export default function ProductDetail() {
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16 text-center">
                     <Lock className="h-12 w-12 text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">This feature is only available for Pro members</h3>
+                    <h3 className="text-lg font-semibold mb-2">AR Viewing - Pro Feature</h3>
                     <p className="text-muted-foreground mb-6 max-w-md">
-                      Upgrade to Pro to access AR viewing and see how products look in your space
+                      See how this product looks in your actual space with augmented reality
                     </p>
                     <Link to="/subscribe">
                       <Button className="bg-gradient-primary hover:shadow-elegant hover-lift">
-                        Upgrade to Pro
+                        Upgrade to Pro - ₹999/month
                       </Button>
                     </Link>
                   </div>

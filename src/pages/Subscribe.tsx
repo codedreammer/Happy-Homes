@@ -113,11 +113,16 @@ export default function Subscribe() {
                         ? 'bg-gradient-primary hover:shadow-elegant' 
                         : plan.current 
                           ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                          : ''
+                          : 'bg-gradient-primary hover:shadow-elegant'
                     }`}
                     disabled={plan.current}
+                    onClick={() => {
+                      if (!plan.current) {
+                        alert(`Upgrading to ${plan.name} plan for ₹${plan.price[selectedPlan]}/${selectedPlan === 'monthly' ? 'month' : 'year'}. Payment integration coming soon!`);
+                      }
+                    }}
                   >
-                    {plan.current ? 'Current Plan' : `Upgrade to ${plan.name}`}
+                    {plan.current ? 'Current Plan' : `Get ${plan.name} - ₹${plan.price[selectedPlan]}/${selectedPlan === 'monthly' ? 'mo' : 'yr'}`}
                   </Button>
                 </CardContent>
               </Card>
