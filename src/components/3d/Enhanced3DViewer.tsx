@@ -20,7 +20,7 @@ function LoadingFallback() {
   );
 }
 
-function DefaultScene({ productName }: { productName?: string }) {
+function DefaultScene() {
   return (
     <group>
       {/* Main product representation */}
@@ -44,7 +44,7 @@ function DefaultScene({ productName }: { productName?: string }) {
 
 export function Enhanced3DViewer({ modelUrl, productName }: Enhanced3DViewerProps) {
   return (
-    <div className="w-full h-full min-h-[400px] bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg overflow-hidden relative">
+    <div className="w-full h-full min-h-[400px] bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg overflow-hidden relative" aria-label={`3D view of ${productName ?? 'product'}`}>
       <Suspense fallback={<LoadingFallback />}>
         <Canvas
           camera={{ position: [4, 4, 4], fov: 50 }}
@@ -67,7 +67,7 @@ export function Enhanced3DViewer({ modelUrl, productName }: Enhanced3DViewerProp
           {modelUrl ? (
             <Model url={modelUrl} />
           ) : (
-            <DefaultScene productName={productName} />
+            <DefaultScene />
           )}
           
           {/* Ground and shadows */}
