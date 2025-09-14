@@ -101,13 +101,13 @@ const Index = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
             {categories.map((category, index) => (
-              <Card key={index} className="hover-lift shadow-soft hover:shadow-warm cursor-pointer">
+              <Card key={index} className="hover-lift shadow-soft hover:shadow-warm cursor-pointer bg-[#4A4A7A] border-[#4A4A7A]">
                 <CardContent className="p-6 text-center">
                   <div className={`w-12 h-12 ${category.color} rounded-full flex items-center justify-center mx-auto mb-4 opacity-20`}>
-                    <Users className="h-6 w-6 text-foreground" />
+                    <Users className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold mb-1">{category.name}</h3>
-                  <p className="text-sm text-muted-foreground">{category.count}</p>
+                  <h3 className="font-semibold mb-1 text-white">{category.name}</h3>
+                  <p className="text-sm text-white/70">{category.count}</p>
                 </CardContent>
               </Card>
             ))}
@@ -146,7 +146,7 @@ const Index = () => {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="text-lg px-8 py-6 hover-lift border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
+                className="text-lg px-8 py-6 hover-lift border-white/40 text-white bg-white/20 hover:bg-white/30"
                 asChild
               >
                 <Link to="/products">Browse Products</Link>

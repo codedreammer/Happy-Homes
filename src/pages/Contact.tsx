@@ -115,7 +115,7 @@ export default function Contact() {
                 <div className="flex items-start space-x-3">
                   <MapPin className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium">Design Hub India</p>
+                    <p className="font-medium">Happy House India</p>
                     <p className="text-sm text-muted-foreground">
                       Tower A, 15th Floor<br />
                       Cyber City, Sector 24<br />
@@ -135,7 +135,7 @@ export default function Contact() {
                 <div className="flex items-center space-x-3">
                   <Mail className="h-5 w-5 text-primary flex-shrink-0" />
                   <div>
-                    <p className="font-medium">hello@designhub.in</p>
+                    <p className="font-medium">hello@happyhouse.in</p>
                     <p className="text-sm text-muted-foreground">General Inquiries</p>
                   </div>
                 </div>
