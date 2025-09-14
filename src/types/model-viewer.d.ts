@@ -4,8 +4,10 @@ declare namespace JSX {
       src?: string;
       ar?: boolean;
       'ar-modes'?: string;
+      'ar-placement'?: string;
       'camera-controls'?: boolean;
       'auto-rotate'?: boolean;
+      loading?: string;
       alt?: string;
     };
   }

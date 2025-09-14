@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Eye, Maximize, RotateCcw } from "lucide-react";
 import { Enhanced3DViewer } from "@/components/3d/Enhanced3DViewer";
-import { useNavigate } from "react-router-dom";
 
 interface Product3DModalProps {
   product: {
@@ -19,7 +18,6 @@ interface Product3DModalProps {
 export function Product3DModal({ product, trigger }: Product3DModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"3d" | "ar">("3d");
-  const navigate = useNavigate();
 
   const defaultTrigger = (
     <Button variant="outline" size="sm" className="gap-2">
@@ -51,7 +49,7 @@ export function Product3DModal({ product, trigger }: Product3DModalProps) {
                 onClick={() => setViewMode("ar")}
               >
                 AR View
-                <Badge className="ml-1 text-xs bg-gradient-primary">Pro</Badge>
+                <Badge className="ml-1 text-xs bg-gradient-primary">Live</Badge>
               </Button>
             </div>
           </DialogTitle>
@@ -65,25 +63,31 @@ export function Product3DModal({ product, trigger }: Product3DModalProps) {
                   src={product.model_url}
                   camera-controls
                   auto-rotate
+                  ar
+                  ar-modes="scene-viewer webxr quick-look"
+                  ar-placement="floor"
+                  loading="eager"
                   style={{ width: '100%', height: '100%' }}
                   alt={product.name}
                 ></model-viewer>
               ) : (
-                <div className="h-full flex items-center justify-center bg-muted/50">
-                  <div className="text-center">
-                    <Badge className="mb-4 bg-gradient-primary text-primary-foreground px-4 py-2">
-                      Pro Feature
-                    </Badge>
-                    <p className="text-muted-foreground mb-4">AR viewing is available with Pro subscription</p>
-                    <Button 
-                      onClick={() => {
-                        setIsOpen(false);
-                        navigate('/subscribe');
-                      }} 
-                      className="bg-gradient-primary"
-                    >
-                      Upgrade to Pro - ₹999/month
-                    </Button>
+                <div className="h-full">
+                  <model-viewer
+                    src={product.model_url || "/chesterfield-sofa.glb"}
+                    camera-controls
+                    auto-rotate
+                    ar
+                    ar-modes="scene-viewer webxr quick-look"
+                    ar-placement="floor"
+                    loading="eager"
+                    style={{ width: '100%', height: '100%' }}
+                    alt={`${product.name} in AR`}
+                  ></model-viewer>
+                  
+                  {/* AR Controls overlay */}
+                  <div className="absolute top-4 right-4 bg-black/70 text-white text-sm px-3 py-2 rounded-lg">
+                    <p className="mb-2">✨ AR Mode Active</p>
+                    <p className="text-xs">Tap AR button to place in your space</p>
                   </div>
                 </div>
               )}
@@ -97,7 +101,12 @@ export function Product3DModal({ product, trigger }: Product3DModalProps) {
           {/* Controls overlay */}
           <div className="absolute bottom-4 left-4 bg-black/70 text-white text-sm px-3 py-2 rounded-lg flex items-center gap-2">
             <RotateCcw className="h-4 w-4" />
-            <span>Click & drag to rotate • Scroll to zoom</span>
+            <span>
+              {viewMode === "ar" 
+                ? "Tap AR button • Point camera at floor" 
+                : "Click & drag to rotate • Scroll to zoom"
+              }
+            </span>
           </div>
           
           <div className="absolute bottom-4 right-4">
