@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Mail, Lock, User, Chrome, Users, Briefcase, Shield } from "lucide-react";
 
 export default function Auth() {
-  const { user, loading, signIn, signUp, signInWithGoogle } = useAuth();
+  const { user, loading, signIn, signUp, signInWithGoogle, resendConfirmation } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -19,6 +19,7 @@ export default function Auth() {
     role: "client",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResending, setIsResending] = useState(false);
 
   // Redirect if already authenticated
   if (user && !loading) {
@@ -46,6 +47,16 @@ export default function Auth() {
       await signInWithGoogle();
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (!formData.email) return;
+    setIsResending(true);
+    try {
+      await resendConfirmation(formData.email);
+    } finally {
+      setIsResending(false);
     }
   };
 
@@ -183,6 +194,19 @@ export default function Auth() {
               {isSubmitting ? "Please wait..." : (isSignUp ? "Create Account" : "Sign In")}
             </Button>
           </form>
+
+          {!isSignUp && (
+            <div className="text-center mt-2">
+              <button
+                type="button"
+                className="text-primary hover:underline text-sm"
+                onClick={handleResend}
+                disabled={isResending || !formData.email}
+              >
+                {isResending ? "Resending..." : "Resend confirmation email"}
+              </button>
+            </div>
+          )}
 
           <div className="text-center text-sm">
             <span className="text-muted-foreground">

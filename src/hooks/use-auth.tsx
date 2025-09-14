@@ -21,6 +21,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, name?: string, role?: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<{ error: any }>;
+  resendConfirmation: (email: string) => Promise<{ error: any }>;
   signInWithGoogle: () => Promise<{ error: any }>;
   isRole: (role: string) => boolean;
   isClient: boolean;
@@ -40,13 +41,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Fetch user profile
-          await fetchUserProfile(session.user.id);
+          // Defer Supabase calls to avoid deadlocks
+          setTimeout(() => {
+            fetchUserProfile(session.user!.id);
+          }, 0);
         } else {
           setProfile(null);
         }
@@ -135,6 +138,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error };
   };
 
+  const resendConfirmation = async (email: string) => {
+    try {
+      const redirectUrl = `${window.location.origin}/`;
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email,
+        options: { emailRedirectTo: redirectUrl }
+      });
+
+      if (error) {
+        toast({
+          title: "Resend failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Email sent",
+          description: "We've resent the confirmation link.",
+        });
+      }
+
+      return { error };
+    } catch (error: any) {
+      toast({
+        title: "Resend failed",
+        description: error.message || "An unexpected error occurred",
+        variant: "destructive",
+      });
+      return { error };
+    }
+  };
+
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -206,6 +242,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signUp,
         signIn,
         signOut,
+        resendConfirmation,
         signInWithGoogle,
         isRole,
         isClient,
