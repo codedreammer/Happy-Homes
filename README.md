@@ -1,24 +1,40 @@
-# Welcome to your Lovable project
+<h1>Happy House</h1> 
+modern e-commerce-style web platform built with React (Vite + TypeScript), Supabase, and TailwindCSS.
+The app allows users to browse products, view 3D models, and access AR features (exclusive for Pro members).
 
-## Project info
+🚀 Features
 
-**URL**: https://lovable.dev/projects/931a62b3-fb8d-4c17-a632-f5232741cad1
+🔐 Authentication with Supabase (Email/Password, OAuth, etc.)
 
-## How can I edit this code?
+📦 Product Catalog with details (name, description, price, vendor, images, specs)
 
-There are several ways of editing your application.
+🎨 3D Model Viewer for immersive product experience
 
-**Use Lovable**
+📱 AR Mode (Pro Members only)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/931a62b3-fb8d-4c17-a632-f5232741cad1) and start prompting.
+💳 Upgrade to Pro button → redirects to subscription/payment page
 
-Changes made via Lovable will be committed automatically to this repo.
+🛠️ Clean folder structure with modular hooks, components, and pages
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+📂 Project Structure
+```sh
+desify-hub/
+├── public/               # Static assets
+├── src/  
+│   ├── assets/           # Images, icons
+│   ├── components/       # Reusable UI components
+│   ├── hooks/            # Custom React hooks (auth, toast, mobile)
+│   ├── pages/            # Page components (Home, Products, Details, Contact, etc.)
+│   ├── lib/              # Utility functions
+│   ├── integrations/     # Future third-party integrations
+│   ├── App.tsx           # Root app component
+│   ├── main.tsx          # Entry point
+│   └── index.css         # Global styles
+├── supabase/             # Supabase config & types
+├── .env                  # Environment variables
+├── package.json          # Dependencies & scripts
+└── README.md             # Project documentation
+```
 
 Follow these steps:
 
@@ -36,20 +52,6 @@ npm i
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
 ## What technologies are used for this project?
 
 This project is built with:
@@ -60,14 +62,28 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+  🔑 Authentication
 
-Simply open [Lovable](https://lovable.dev/projects/931a62b3-fb8d-4c17-a632-f5232741cad1) and click on Share -> Publish.
+Users can sign up/login using Supabase.
 
-## Can I connect a custom domain to my Lovable project?
+Free users → Access to products & 3D models.
 
-Yes, you can!
+Pro users → Access to AR features.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+🖼️ Product Display
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Products are fetched from Supabase.
+
+model_url field is used to render 3D models.
+
+AR button is conditionally shown only if the user has Pro membership.
+
+💳 Upgrade to Pro
+
+A “Upgrade to Pro” button redirects users to the payment/subscription page.
+
+Once upgraded, AR features are unlocked.
+
+🤝 Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss.
