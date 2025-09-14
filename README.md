@@ -16,6 +16,10 @@ The app allows users to browse products, view 3D models, and access AR features 
 
 🛠️ Clean folder structure with modular hooks, components, and pages
 
+live demo:-
+https://happyhomes-3v07f0qhu-akshay-anands-projects-cf891d53.vercel.app
+
+
 📂 Project Structure
 ```sh
 desify-hub/
