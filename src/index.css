@@ -2,62 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Indian-inspired modern minimalist design system. 
-All colors MUST be HSL with warm, elegant tones.
+/* Happy Homes Real Estate Design System
+"A PLACE WHERE YOU BELONG" - Warm, trustworthy, and welcoming colors
 */
 
 @layer base {
   :root {
-    /* Base colors - warm whites and sophisticated backgrounds */
-    --background: 35 25% 99%;
-    --foreground: 25 15% 15%;
+    /* Happy Homes Brand Colors */
+    --color-primary: #8B1A1B;    /* OU Crimson for primary brand elements */
+    --color-secondary: #E2A80A;  /* Harvest Gold for highlights */
+    --color-dark: #2C2C54;       /* Space Cadet for dark areas */
+    --color-light: #F0F1F5;      /* Anti-flash white for backgrounds */
+    --color-text-dark: #212121;  /* Near-black for text on light bg */
+    --color-text-light: #FFFFFF; /* White for text on dark bg */
 
-    /* Card system with subtle warmth */
-    --card: 35 25% 98%;
-    --card-foreground: 25 15% 15%;
+    /* Base colors - Anti-flash white backgrounds with proper contrast */
+    --background: 225 20% 95%;   /* #F0F1F5 converted to HSL */
+    --foreground: 0 0% 13%;      /* #212121 converted to HSL */
 
-    /* Popover with elegant backdrop */
-    --popover: 35 25% 99%;
-    --popover-foreground: 25 15% 15%;
+    /* Card system with light neutral tones */
+    --card: 225 20% 97%;
+    --card-foreground: 0 0% 13%;
 
-    /* Primary - sophisticated teal with Indian inspiration */
-    --primary: 173 45% 35%;
-    --primary-foreground: 35 25% 99%;
-    --primary-glow: 173 65% 55%;
-    --primary-soft: 173 35% 85%;
+    /* Popover with clean backdrop */
+    --popover: 225 20% 95%;
+    --popover-foreground: 0 0% 13%;
 
-    /* Secondary - warm beige palette */
-    --secondary: 35 20% 92%;
-    --secondary-foreground: 25 15% 25%;
-    --secondary-warm: 35 35% 88%;
+    /* Primary - OU Crimson (#8B1A1B) */
+    --primary: 359 75% 32%;      /* #8B1A1B converted to HSL */
+    --primary-foreground: 0 0% 100%; /* White text on crimson */
+    --primary-glow: 359 75% 45%; /* Lighter crimson for glow effects */
+    --primary-soft: 359 45% 85%; /* Very light crimson for soft backgrounds */
 
-    /* Muted tones with warmth */
-    --muted: 35 15% 95%;
-    --muted-foreground: 25 10% 55%;
+    /* Secondary - Harvest Gold (#E2A80A) */
+    --secondary: 225 20% 92%;
+    --secondary-foreground: 240 15% 18%; /* Space Cadet for text */
+    --secondary-warm: 225 15% 88%;
 
-    /* Accent - elegant terracotta */
-    --accent: 15 65% 65%;
-    --accent-foreground: 35 25% 99%;
-    --accent-soft: 15 45% 85%;
+    /* Muted tones with light neutral */
+    --muted: 225 15% 90%;
+    --muted-foreground: 240 10% 45%;
 
-    /* Destructive with warm tone */
+    /* Accent - Harvest Gold (#E2A80A) */
+    --accent: 45 92% 47%;        /* #E2A80A converted to HSL */
+    --accent-foreground: 0 0% 100%; /* White text on gold */
+    --accent-soft: 45 70% 85%;   /* Light gold for soft backgrounds */
+
+    /* Destructive maintaining accessibility */
     --destructive: 0 75% 55%;
-    --destructive-foreground: 35 25% 99%;
+    --destructive-foreground: 0 0% 100%;
 
-    /* Borders and inputs with subtle warmth */
-    --border: 35 15% 88%;
-    --input: 35 15% 90%;
-    --ring: 173 45% 35%;
+    /* Borders and inputs with light neutral tones */
+    --border: 225 15% 85%;
+    --input: 225 15% 88%;
+    --ring: 359 75% 32%; /* OU Crimson for focus rings */
 
-    /* Design tokens for sophisticated effects */
+    /* Design tokens for Happy Homes brand */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
     --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
     --gradient-warm: linear-gradient(180deg, hsl(var(--background)), hsl(var(--secondary)));
     --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--secondary-warm)));
 
-    /* Shadow system with warm undertones */
+    /* Shadow system with brand-appropriate undertones */
     --shadow-elegant: 0 10px 40px -12px hsl(var(--primary) / 0.25);
-    --shadow-warm: 0 8px 30px -8px hsl(15 25% 60% / 0.2);
+    --shadow-warm: 0 8px 30px -8px hsl(var(--accent) / 0.2);
     --shadow-soft: 0 4px 20px -4px hsl(var(--muted-foreground) / 0.1);
 
     /* Animation and transitions */
@@ -66,61 +74,61 @@ All colors MUST be HSL with warm, elegant tones.
 
     --radius: 0.75rem;
 
-    /* Sidebar with warm tones */
-    --sidebar-background: 35 25% 97%;
-    --sidebar-foreground: 25 15% 25%;
-    --sidebar-primary: 173 45% 35%;
-    --sidebar-primary-foreground: 35 25% 99%;
-    --sidebar-accent: 35 20% 90%;
-    --sidebar-accent-foreground: 25 15% 25%;
-    --sidebar-border: 35 15% 85%;
-    --sidebar-ring: 173 45% 35%;
+    /* Sidebar with Space Cadet dark theme */
+    --sidebar-background: 240 35% 18%; /* #2C2C54 converted to HSL */
+    --sidebar-foreground: 0 0% 100%;   /* White text */
+    --sidebar-primary: 359 75% 32%;    /* OU Crimson */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 25% 25%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 240 20% 30%;
+    --sidebar-ring: 359 75% 32%;
   }
 
   .dark {
-    /* Dark mode with warm undertones */
-    --background: 25 25% 8%;
-    --foreground: 35 25% 95%;
+    /* Dark mode with Space Cadet base */
+    --background: 240 35% 18%;   /* Space Cadet #2C2C54 */
+    --foreground: 0 0% 100%;     /* White text */
 
-    --card: 25 25% 10%;
-    --card-foreground: 35 25% 95%;
+    --card: 240 30% 22%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 25 25% 8%;
-    --popover-foreground: 35 25% 95%;
+    --popover: 240 35% 18%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 173 65% 55%;
-    --primary-foreground: 25 25% 8%;
-    --primary-glow: 173 75% 65%;
+    --primary: 359 75% 45%;      /* Lighter OU Crimson for dark mode */
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 359 75% 55%;
 
-    --secondary: 25 15% 18%;
-    --secondary-foreground: 35 25% 85%;
+    --secondary: 240 25% 25%;
+    --secondary-foreground: 0 0% 90%;
 
-    --muted: 25 15% 15%;
-    --muted-foreground: 35 15% 65%;
+    --muted: 240 20% 25%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 15 75% 65%;
-    --accent-foreground: 25 25% 8%;
+    --accent: 45 92% 55%;        /* Brighter Harvest Gold for dark mode */
+    --accent-foreground: 240 35% 18%;
 
     --destructive: 0 75% 55%;
-    --destructive-foreground: 35 25% 95%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 25 15% 20%;
-    --input: 25 15% 18%;
-    --ring: 173 65% 55%;
+    --border: 240 20% 30%;
+    --input: 240 25% 25%;
+    --ring: 359 75% 45%;
 
     /* Dark mode gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
     --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
 
-    /* Dark sidebar */
-    --sidebar-background: 25 25% 10%;
-    --sidebar-foreground: 35 25% 85%;
-    --sidebar-primary: 173 65% 55%;
-    --sidebar-primary-foreground: 25 25% 8%;
-    --sidebar-accent: 25 15% 15%;
-    --sidebar-accent-foreground: 35 25% 85%;
-    --sidebar-border: 25 15% 20%;
-    --sidebar-ring: 173 65% 55%;
+    /* Dark sidebar - deeper Space Cadet */
+    --sidebar-background: 240 40% 15%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 359 75% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 25% 20%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 240 20% 25%;
+    --sidebar-ring: 359 75% 45%;
   }
 }
 

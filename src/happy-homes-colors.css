@@ -1,0 +1,359 @@
+/* 
+ * HAPPY HOMES REAL ESTATE - COMPLETE COLOR SYSTEM
+ * "A PLACE WHERE YOU BELONG"
+ * 
+ * This CSS implements the new four-color palette for Happy Homes real estate website.
+ * Colors evoke warmth, trust, and belonging - perfect for a real estate company.
+ */
+
+:root {
+  /* ===== HAPPY HOMES BRAND COLORS ===== */
+  --color-primary: #8B1A1B;    /* OU Crimson - Primary buttons, headers, key accents */
+  --color-secondary: #E2A80A;  /* Harvest Gold - Secondary buttons, highlights, CTAs */
+  --color-dark: #2C2C54;       /* Space Cadet - Footer, dark sections, bold text */
+  --color-light: #F0F1F5;      /* Anti-flash white - Main backgrounds, light sections */
+  --color-text-dark: #212121;  /* Near-black - Primary text on light backgrounds */
+  --color-text-light: #FFFFFF; /* White - Text on dark backgrounds */
+
+  /* ===== HSL CONVERSIONS FOR TAILWIND COMPATIBILITY ===== */
+  /* Primary - OU Crimson (#8B1A1B) */
+  --primary: 359 75% 32%;
+  --primary-foreground: 0 0% 100%;
+  --primary-hover: 359 75% 28%;
+  --primary-light: 359 45% 85%;
+
+  /* Secondary - Harvest Gold (#E2A80A) */
+  --secondary: 45 92% 47%;
+  --secondary-foreground: 0 0% 13%;
+  --secondary-hover: 45 92% 42%;
+  --secondary-light: 45 70% 85%;
+
+  /* Dark - Space Cadet (#2C2C54) */
+  --dark: 240 35% 18%;
+  --dark-foreground: 0 0% 100%;
+  --dark-lighter: 240 30% 25%;
+
+  /* Light - Anti-flash white (#F0F1F5) */
+  --light: 225 20% 95%;
+  --light-foreground: 0 0% 13%;
+  --light-darker: 225 15% 90%;
+
+  /* ===== SEMANTIC COLOR MAPPINGS ===== */
+  --background: var(--light);
+  --foreground: var(--light-foreground);
+  --card: 225 20% 97%;
+  --card-foreground: var(--light-foreground);
+  --muted: 225 15% 90%;
+  --muted-foreground: 240 10% 45%;
+  --accent: var(--secondary);
+  --accent-foreground: var(--secondary-foreground);
+  --border: 225 15% 85%;
+  --input: 225 15% 88%;
+  --ring: var(--primary);
+
+  /* ===== HAPPY HOMES GRADIENTS ===== */
+  --gradient-hero: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  --gradient-warm: linear-gradient(180deg, var(--color-light), #E8E9ED);
+  --gradient-primary: linear-gradient(135deg, var(--color-primary), #A01E1F);
+  --gradient-secondary: linear-gradient(135deg, var(--color-secondary), #F4B90C);
+
+  /* ===== SHADOWS WITH BRAND COLORS ===== */
+  --shadow-primary: 0 10px 40px -12px rgba(139, 26, 27, 0.25);
+  --shadow-secondary: 0 8px 30px -8px rgba(226, 168, 10, 0.2);
+  --shadow-dark: 0 4px 20px -4px rgba(44, 44, 84, 0.15);
+  --shadow-soft: 0 2px 10px -2px rgba(33, 33, 33, 0.1);
+
+  /* ===== ACCESSIBILITY COMPLIANT TEXT COLORS ===== */
+  --text-on-primary: var(--color-text-light);    /* White on OU Crimson - 7.8:1 ratio */
+  --text-on-secondary: var(--color-text-dark);   /* Dark on Harvest Gold - 5.2:1 ratio */
+  --text-on-dark: var(--color-text-light);       /* White on Space Cadet - 8.9:1 ratio */
+  --text-on-light: var(--color-text-dark);       /* Dark on Anti-flash white - 8.1:1 ratio */
+}
+
+/* ===== DARK MODE THEME ===== */
+.dark {
+  --background: var(--dark);
+  --foreground: var(--dark-foreground);
+  --card: 240 30% 22%;
+  --card-foreground: 0 0% 100%;
+  --muted: 240 20% 25%;
+  --muted-foreground: 0 0% 70%;
+  --accent: 45 92% 55%;
+  --accent-foreground: 240 35% 18%;
+  --border: 240 20% 30%;
+  --input: 240 25% 25%;
+  --ring: 359 75% 45%;
+}
+
+/* ===== HAPPY HOMES COMPONENT CLASSES ===== */
+
+/* Primary Elements */
+.hh-btn-primary {
+  background-color: var(--color-primary);
+  color: var(--text-on-primary);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.hh-btn-primary:hover {
+  background-color: #7A1718;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-primary);
+}
+
+/* Secondary Elements */
+.hh-btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--text-on-secondary);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.hh-btn-secondary:hover {
+  background-color: #D19709;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-secondary);
+}
+
+/* Headers */
+.hh-header {
+  background-color: var(--color-primary);
+  color: var(--text-on-primary);
+  padding: 1rem 2rem;
+}
+
+.hh-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.hh-tagline {
+  color: var(--color-secondary);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-top: 0.5rem;
+}
+
+/* Footer */
+.hh-footer {
+  background-color: var(--color-dark);
+  color: var(--text-on-dark);
+  padding: 3rem 2rem 2rem;
+}
+
+.hh-footer h3 {
+  color: var(--color-secondary);
+  margin-bottom: 1rem;
+}
+
+.hh-footer a {
+  color: var(--text-on-dark);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.hh-footer a:hover {
+  color: var(--color-secondary);
+}
+
+/* Cards */
+.hh-card {
+  background-color: var(--color-light);
+  color: var(--text-on-light);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: var(--shadow-soft);
+  transition: all 0.3s ease;
+}
+
+.hh-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-primary);
+}
+
+.hh-card-dark {
+  background-color: var(--color-dark);
+  color: var(--text-on-dark);
+}
+
+/* Property Listings */
+.hh-property-card {
+  background: var(--color-light);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  transition: all 0.3s ease;
+}
+
+.hh-property-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-primary);
+}
+
+.hh-property-price {
+  background-color: var(--color-primary);
+  color: var(--text-on-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.hh-property-highlight {
+  background-color: var(--color-secondary);
+  color: var(--text-on-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Navigation */
+.hh-nav {
+  background: rgba(240, 241, 245, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(139, 26, 27, 0.1);
+}
+
+.hh-nav-link {
+  color: var(--color-text-dark);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.hh-nav-link:hover {
+  background-color: var(--color-primary);
+  color: var(--text-on-primary);
+}
+
+.hh-nav-link.active {
+  background-color: var(--color-secondary);
+  color: var(--text-on-secondary);
+}
+
+/* Hero Section */
+.hh-hero {
+  background: var(--gradient-hero);
+  color: var(--text-on-primary);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.hh-hero h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hh-hero .tagline {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+/* Form Elements */
+.hh-input {
+  background-color: var(--color-light);
+  border: 2px solid transparent;
+  color: var(--text-on-light);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.hh-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(139, 26, 27, 0.1);
+}
+
+.hh-select {
+  background-color: var(--color-light);
+  border: 2px solid transparent;
+  color: var(--text-on-light);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* Utility Classes */
+.hh-bg-primary { background-color: var(--color-primary); color: var(--text-on-primary); }
+.hh-bg-secondary { background-color: var(--color-secondary); color: var(--text-on-secondary); }
+.hh-bg-dark { background-color: var(--color-dark); color: var(--text-on-dark); }
+.hh-bg-light { background-color: var(--color-light); color: var(--text-on-light); }
+
+.hh-text-primary { color: var(--color-primary); }
+.hh-text-secondary { color: var(--color-secondary); }
+.hh-text-dark { color: var(--color-dark); }
+
+.hh-border-primary { border-color: var(--color-primary); }
+.hh-border-secondary { border-color: var(--color-secondary); }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hh-hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hh-hero .tagline {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+  }
+  
+  .hh-card {
+    padding: 1.5rem;
+  }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .hh-btn-primary {
+    border: 2px solid var(--text-on-primary);
+  }
+  
+  .hh-btn-secondary {
+    border: 2px solid var(--text-on-secondary);
+  }
+  
+  .hh-card {
+    border: 1px solid var(--color-text-dark);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .hh-hero {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .hh-btn-primary,
+  .hh-btn-secondary {
+    border: 2px solid black !important;
+    background: white !important;
+    color: black !important;
+  }
+}

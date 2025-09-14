@@ -1,3 +1,7 @@
+/* Happy Homes Real Estate App Styles
+   "A PLACE WHERE YOU BELONG"
+*/
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -11,11 +15,13 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em var(--color-primary));
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+
+.logo.happy-homes:hover {
+  filter: drop-shadow(0 0 2em var(--color-secondary));
 }
 
 @keyframes logo-spin {
@@ -38,5 +44,34 @@
 }
 
 .read-the-docs {
-  color: #888;
+  color: var(--color-text-dark);
+}
+
+/* Happy Homes specific utility classes */
+.happy-homes-primary {
+  color: var(--color-primary);
+}
+
+.happy-homes-secondary {
+  color: var(--color-secondary);
+}
+
+.happy-homes-bg-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+}
+
+.happy-homes-bg-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text-dark);
+}
+
+.happy-homes-bg-dark {
+  background-color: var(--color-dark);
+  color: var(--color-text-light);
+}
+
+.happy-homes-bg-light {
+  background-color: var(--color-light);
+  color: var(--color-text-dark);
 }
