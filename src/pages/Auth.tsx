@@ -32,10 +32,20 @@ export default function Auth() {
 
     try {
       if (isSignUp) {
-        await signUp(formData.email, formData.password, formData.name, formData.role);
+        const result = await signUp(formData.email, formData.password, formData.name, formData.role);
+        if (!result.error) {
+          // Clear form on successful signup
+          setFormData({ email: "", password: "", name: "", role: "client" });
+        }
       } else {
-        await signIn(formData.email, formData.password);
+        const result = await signIn(formData.email, formData.password);
+        if (!result.error) {
+          // Clear form on successful signin
+          setFormData({ email: "", password: "", name: "", role: "client" });
+        }
       }
+    } catch (error: any) {
+      console.error('Auth error:', error);
     } finally {
       setIsSubmitting(false);
     }

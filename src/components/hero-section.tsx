@@ -23,12 +23,7 @@ export function HeroSection() {
           {/* Left column - Text content */}
           <div className="space-y-8 animate-fade-in">
             <div className="space-y-4">
-              <div className="flex items-center space-x-2 text-primary">
-                <Sparkles className="h-5 w-5" />
-                <span className="text-sm font-medium uppercase tracking-wide">
-                  India's Premier Design Platform
-                </span>
-              </div>
+
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-balance leading-tight">
                 Transform Your{" "}
                 <span className="bg-gradient-primary bg-clip-text text-transparent">

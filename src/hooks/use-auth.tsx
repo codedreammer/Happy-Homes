@@ -96,46 +96,62 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         if (error.code !== 'PGRST116') { // Not found error
-          console.error('Error fetching profile:', error);
+          console.error('Error fetching profile:', JSON.stringify({ code: error.code, message: error.message }));
         }
         return;
       }
 
       setProfile(data);
-    } catch (error) {
-      console.error('Error fetching profile:', error);
+    } catch (error: any) {
+      console.error('Error fetching profile:', JSON.stringify({ message: error?.message || 'Unknown error' }));
     }
   };
 
   const signUp = async (email: string, password: string, name?: string, role: string = 'client') => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: { 
-          name,
-          role
-        },
-      }
-    });
+    try {
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: { 
+            name: name || email.split('@')[0],
+            role
+          },
+        }
+      });
 
-    if (error) {
+      if (error) {
+        console.error('Signup error:', error);
+        toast({
+          title: "Sign up failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else if (data.user && !data.user.email_confirmed_at) {
+        toast({
+          title: "Check your email",
+          description: "We've sent you a confirmation link. Please check your email and click the link to verify your account.",
+        });
+      } else {
+        toast({
+          title: "Account created",
+          description: "Your account has been created successfully.",
+        });
+      }
+
+      return { error, data };
+    } catch (err: any) {
+      console.error('Signup exception:', err);
       toast({
         title: "Sign up failed",
-        description: error.message,
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
-    } else {
-      toast({
-        title: "Check your email",
-        description: "We've sent you a confirmation link.",
-      });
+      return { error: err };
     }
-
-    return { error };
   };
 
   const resendConfirmation = async (email: string) => {

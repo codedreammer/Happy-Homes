@@ -181,7 +181,7 @@ const Index = () => {
                   <Home className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  DesifyHub
+                  Happy House
                 </span>
               </div>
               <p className="text-muted-foreground">
@@ -218,7 +218,7 @@ const Index = () => {
           </div>
           
           <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
-            <p>&copy; 2024 DesifyHub. All rights reserved. Built with ❤️ in India.</p>
+            <p>&copy; 2024 Happy House. All rights reserved. Built with ❤️ in India.</p>
           </div>
         </div>
       </footer>
